@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinaria Humboldt - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+        }
+
+        body {
+            background-color: #f5f7fa;
+        }
+
+        .sidebar {
+            background: var(--primary-color);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .sidebar-header {
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-menu {
+            margin-top: 20px;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-paw fa-2x mb-3"></i>
+                    <h4>Veterinaria Humboldt</h4>
+                </div>
+                <div class="sidebar-menu">
+                    <div class="menu-item active">
+                        <i class="fas fa-home"></i> Dashboard
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-paw"></i> Pacientes
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-calendar"></i> Citas
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-user-md"></i> Veterinarios
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-pills"></i> Inventario
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-chart-bar"></i> Reportes
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-cog"></i> Configuración
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Welcome Banner -->
+                <div class="welcome-banner">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2>Bienvenido, {{ user.username }}</h2>
+                            <p>Panel de Control - Veterinaria Humboldt</p>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0">{{ user.username }}</h5>
+                                <small>Administrador</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-paw"></i>
+                            <h3>150</h3>
+                            <p>Pacientes Activos</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-calendar-check"></i>
+                            <h3>25</h3>
+                            <p>Citas Hoy</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-user-md"></i>
+                            <h3>8</h3>
+                            <p>Veterinarios</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-shopping-cart"></i>
+                            <h3>45</h3>
+                            <p>Productos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="dashboard-card">
+                            <h4>Actividad Reciente</h4>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Nueva cita programada</h6>
+                                        <small>3 mins ago</small>
+                                    </div>
+                                    <p class="mb-1">Consulta de rutina para Max</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Vacunación completada</h6>
+                                        <small>1 hour ago</small>
+                                    </div>
+                                    <p class="mb-1">Luna recibió sus vacunas anuales</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Nuevo paciente registrado</h6>
+                                        <small>2 hours ago</small>
+                                    </div>
+                                    <p class="mb-1">Rocky - Pastor Alemán</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="dashboard-card">
+                            <h4>Próximas Citas</h4>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Max - 10:00 AM</h6>
+                                        <small>Hoy</small>
+                                    </div>
+                                    <p class="mb-1">Consulta de rutina</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Luna - 2:30 PM</h6>
+                                        <small>Hoy</small>
+                                    </div>
+                                    <p class="mb-1">Control post-vacunación</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
