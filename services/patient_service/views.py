@@ -3,6 +3,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import Paciente
 import json
+from rest_framework import viewsets
+from .serializers import PacienteSerializer
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import PacienteForm
 
 @csrf_exempt
 @login_required
@@ -117,4 +123,72 @@ def patient_detail(request, patient_id):
         return JsonResponse({
             'status': 'success',
             'message': 'Paciente eliminado correctamente'
-        }) 
+        })
+
+class PacienteViewSet(viewsets.ModelViewSet):
+    queryset = Paciente.objects.all()
+    serializer_class = PacienteSerializer
+
+def listar_pacientes(request):
+    pacientes = Paciente.objects.all()
+    
+    # Filtros
+    nombre = request.GET.get('nombre', '')
+    especie = request.GET.get('especie', '')
+    propietario = request.GET.get('propietario', '')
+    
+    if nombre:
+        pacientes = pacientes.filter(nombre__icontains=nombre)
+    if especie:
+        pacientes = pacientes.filter(especie__icontains=especie)
+    if propietario:
+        pacientes = pacientes.filter(propietario__icontains=propietario)
+    
+    # Paginación
+    paginator = Paginator(pacientes, 10)  # 10 pacientes por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'patient_service/listar_pacientes.html', {
+        'page_obj': page_obj,
+        'nombre': nombre,
+        'especie': especie,
+        'propietario': propietario
+    })
+
+def crear_paciente(request):
+    if request.method == 'POST':
+        form = PacienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_pacientes')
+    else:
+        form = PacienteForm()
+    
+    return render(request, 'patient_service/crear_paciente.html', {
+        'form': form
+    })
+
+def editar_paciente(request, pk):
+    paciente = get_object_or_404(Paciente, pk=pk)
+    if request.method == 'POST':
+        form = PacienteForm(request.POST, instance=paciente)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_pacientes')
+    else:
+        form = PacienteForm(instance=paciente)
+    
+    return render(request, 'patient_service/crear_paciente.html', {
+        'form': form,
+        'paciente': paciente
+    })
+
+def eliminar_paciente(request, pk):
+    paciente = get_object_or_404(Paciente, pk=pk)
+    if request.method == 'POST':
+        paciente.delete()
+        return redirect('listar_pacientes')
+    return render(request, 'patient_service/eliminar_paciente.html', {
+        'paciente': paciente
+    }) 
